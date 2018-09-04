@@ -1,0 +1,24 @@
+insert into inventory(customer, color_code, category, warehouse, in, out, quantity) values('customer 1', 'color code 1', 'category 1', 'warehouse 1', 100, 10, 90);
+insert into inventory(customer, color_code, category, warehouse, in, out, quantity) values('customer 2', 'color code 2', 'category 2', 'warehouse 2', 100, 0, 100);
+
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 0, 100);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 1, 10);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 0, 100);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 1, 10);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 0, 100);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 1, 10);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 0, 100);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 1, 10);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 0, 100);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 1, 10);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 0, 100);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 1, 10);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 0, 100);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 1, 10);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 0, 100);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 1, 10);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 0, 100);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 1, 10);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 0, 100);
+insert into inventory_log(inventory_id, operation_type, quantity) values (1, 1, 10);
+insert into inventory_log(inventory_id, operation_type, quantity) values (2, 0, 100);

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>佳信德仓库管理系统</title>
+
+<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="bower_components/bootstrap-table/dist/bootstrap-table.min.css">
+<style>
+	body {
+		padding: 15px;
+	}
+
+</style>
+
+</head>
+<body>
+<div id="toolbar">
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新增库存</button>
+</div>
+<table id="inventoryTable" data-toggle="table" data-url="inventories" data-search="true" data-show-refresh="true" data-toolbar="#toolbar" data-pagination="true">
+    <thead>
+        <tr>
+            <th data-field="id">ID</th>
+            <th data-field="customer">客户名称</th>
+            <th data-field="colorCode">色号</th>
+            <th data-field="category">类别</th>
+            <th data-field="warehouse">仓库</th>
+            <th data-field="in">入库</th>
+            <th data-field="out">出库</th>
+            <th data-field="quantity">剩余</th>
+            <th data-formatter="format" data-width="150px">操作</th>
+        </tr>
+    </thead>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">新增库存</h4>
+      </div>
+      <div class="modal-body">
+      	<form id="inventoryForm" class="form-horizontal" onsubmit="return createInventory()" action="sladfsda.asdf">
+		  <div class="form-group">
+		    <label for="customer" class="col-sm-2 control-label">客户名称</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" id="customer" required>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="colorCode" class="col-sm-2 control-label">色号</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" id="colorCode" required>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="category" class="col-sm-2 control-label">类别</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" id="category" required>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="warehouse" class="col-sm-2 control-label">仓库</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" id="warehouse" required>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="quantity" class="col-sm-2 control-label">数量</label>
+		    <div class="col-sm-10">
+		      <input type="number" class="form-control" id="quantity" required>
+		    </div>
+		  </div>
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" form="inventoryForm" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="inventoryLogModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">出入库日志</h4>
+      </div>
+      <div class="modal-body">
+      	<table id="inventoryLogTable" data-toggle="table" data-pagination="true">
+		    <thead>
+		        <tr>
+		            <th data-field="id">ID</th>
+		            <th data-field="operationType" data-formatter="formatOperationType">操作类型</th>
+		            <th data-field="quantity">数量</th>
+		            <th data-field="createTime">时间</th>
+		        </tr>
+		    </thead>
+		</table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/bootstrap-table/dist/bootstrap-table.js"></script>
+<script src="bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js"></script>
+<script type="text/javascript">
+function createInventory() {
+	$.post('inventories', {
+		customer: $("#customer").val(),
+		colorCode: $("#colorCode").val(),
+		category: $("#category").val(),
+		warehouse: $("#warehouse").val(),
+		quantity: $("#quantity").val()
+	}, function(data){
+		if (data === "success") {
+			$('#inventoryTable').bootstrapTable('refresh');
+			$('#myModal').modal('hide');
+			$('#inventoryForm').find('input').val('');
+		}
+		else {
+			alert("保存失败")
+		}
+	});
+	return false;
+}
+
+function format(value, row){
+	return '<div class="btn-group btn-group-xs" role="group">'
+			  +'<button type="button" class="btn btn-default" onclick="putInStorage('+row.id+')">入库</button>'
+			  +'<button type="button" class="btn btn-default" onclick="putOutStorage('+row.id+')">出库</button>'
+			  +'<button type="button" class="btn btn-default" data-toggle="modal" data-target="#inventoryLogModal" onclick="showInventoryLogs('+ row.id +')">查看记录</button>'
+		  +'</div>'
+}
+
+function formatOperationType(value){
+	return value === "IN" ? "入库" : "出库";
+}
+
+function showInventoryLogs(id) {
+	$("#inventoryLogTable").bootstrapTable('refresh', {url: "inventories/"+id+"/logs"});
+}
+
+function putInStorage(id) {
+	var value = prompt("请输入数量");
+	if (value > 0) {
+		$.ajax({
+		   type: "PUT",
+		   url: "inventories/" + id + "/in/" + value,
+		   success: function(msg){
+		     $('#inventoryTable').bootstrapTable('refresh');
+		   }
+		});
+	} else {
+		alert("输入有误！！！")
+	}
+}
+
+function putOutStorage(id) {
+	var value = prompt("请输入数量");
+	if (value > 0) {
+		$.ajax({
+		   type: "PUT",
+		   url: "inventories/" + id + "/out/" + value,
+		   success: function(msg){
+		     $('#inventoryTable').bootstrapTable('refresh');
+		   }
+		});
+	} else {
+		alert("输入有误！！！")
+	}
+}
+</script>
+</html>
